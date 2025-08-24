@@ -27,7 +27,7 @@ describe('Super Calculations', () => {
       const result = calculateSuperContribution(80000, 0, 15000, 0.115, true);
       
       expect(result.personalDeductible).toBe(15000);
-      expect(result.taxableIncomeAfter).toBe(80000); // No change for personal deductible
+  expect(result.taxableIncomeAfter).toBe(65000); // personal deductible reduces taxable income (80000 - 15000)
       expect(result.contributionsTax).toBe(2250); // 15000 * 0.15
       expect(result.netIntoSuper).toBe(12750);
     });

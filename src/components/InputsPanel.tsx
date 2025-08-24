@@ -1,5 +1,6 @@
 import { InputField } from './ui/InputField';
 import { Card, Alert } from './ui';
+import { Slider } from './ui/Slider';
 import { useCalculatorStore } from '@/store/calculator';
 import { AU_2024_25_CONFIG } from '@/config/au_2024_25';
 
@@ -7,6 +8,8 @@ export function InputsPanel() {
   const {
     taxableIncome,
     includeMedicareLevy,
+    totalAvailableAmount,
+    superAllocationPercentage,
     salarySacrifice,
     personalDeductible,
     sgRate,
@@ -21,11 +24,14 @@ export function InputsPanel() {
     spouseContribution,
     projectionYears,
     updateInput,
+    updateAllocation,
   } = useCalculatorStore();
 
   const totalConcessional = (taxableIncome * sgRate) + salarySacrifice + personalDeductible;
   const exceedsConcessionalCap = totalConcessional > AU_2024_25_CONFIG.CONCESSIONAL_CAP;
   const division293Applicable = taxableIncome >= AU_2024_25_CONFIG.DIVISION_293_THRESHOLD;
+
+  const formatCurrency = (value: number) => `$${value.toLocaleString()}`;
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -44,17 +50,50 @@ export function InputsPanel() {
             type="checkbox"
             id="medicare-levy"
             checked={includeMedicareLevy}
-            onChange={(e) => updateInput('includeMedicareLevy', e.target.checked)}
-            className="mr-2"
+            onChange={(e: any) => updateInput('includeMedicareLevy', e.target.checked)}
+            className="mr-2 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700"
           />
-          <label htmlFor="medicare-levy" className="text-sm text-gray-700">
+          <label htmlFor="medicare-levy" className="text-sm text-gray-700 dark:text-gray-300">
             Include Medicare Levy (2%)
           </label>
         </div>
       </Card>
 
+      {/* Allocation Control */}
+      <Card title="Money Allocation">
+        <InputField
+          label="Total Available Amount"
+          value={totalAvailableAmount}
+          onChange={(value) => updateInput('totalAvailableAmount', value)}
+          type="currency"
+          placeholder="Total amount to allocate"
+        />
+        
+        <div className="mb-4">
+          <Slider
+            label="Allocation: Personal Deductible vs Mortgage Offset"
+            value={superAllocationPercentage}
+            onChange={updateAllocation}
+            min={0}
+            max={100}
+            step={5}
+          />
+          <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-2">
+            <span>Personal Deductible: {formatCurrency(personalDeductible)}</span>
+            <span>Offset: {formatCurrency(offsetContribution)}</span>
+          </div>
+        </div>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+          <p className="text-sm text-blue-800 dark:text-blue-200">
+            <strong>How it works:</strong> Use the slider to allocate your available money between 
+            personal deductible super contributions (tax benefits) vs mortgage offset (immediate interest savings).
+          </p>
+        </div>
+      </Card>
+
       {/* Super Contributions */}
-      <Card title="Super Contributions">
+      <Card title="Super Contributions Details">
         <InputField
           label="Salary Sacrifice"
           value={salarySacrifice}
@@ -63,13 +102,14 @@ export function InputsPanel() {
           placeholder="Annual salary sacrifice amount"
         />
         
-        <InputField
-          label="Personal Deductible Contribution"
-          value={personalDeductible}
-          onChange={(value) => updateInput('personalDeductible', value)}
-          type="currency"
-          placeholder="Personal deductible contribution"
-        />
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Personal Deductible Contribution (from allocation)
+          </label>
+          <div className="px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+            {formatCurrency(personalDeductible)}
+          </div>
+        </div>
         
         <InputField
           label="Superannuation Guarantee Rate"
@@ -90,13 +130,13 @@ export function InputsPanel() {
         />
         
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Investment Strategy
           </label>
           <select
             value={investmentStrategy}
-            onChange={(e) => updateInput('investmentStrategy', e.target.value as any)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e: any) => updateInput('investmentStrategy', e.target.value as any)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           >
             <option value="CONSERVATIVE">Conservative (5%)</option>
             <option value="BALANCED">Balanced (7%)</option>
@@ -122,7 +162,7 @@ export function InputsPanel() {
       </Card>
 
       {/* Mortgage Offset */}
-      <Card title="Mortgage Offset">
+      <Card title="Mortgage Details">
         <InputField
           label="Loan Principal"
           value={loanPrincipal}
@@ -159,13 +199,14 @@ export function InputsPanel() {
           placeholder="Current offset account balance"
         />
         
-        <InputField
-          label="Additional Offset Contribution"
-          value={offsetContribution}
-          onChange={(value) => updateInput('offsetContribution', value)}
-          type="currency"
-          placeholder="Amount to add to offset"
-        />
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Offset Contribution (from allocation)
+          </label>
+          <div className="px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+            {formatCurrency(offsetContribution)}
+          </div>
+        </div>
       </Card>
 
       {/* Spouse Contribution */}

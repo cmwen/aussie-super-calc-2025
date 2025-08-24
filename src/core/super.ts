@@ -51,8 +51,9 @@ export function calculateSuperContribution(
   const userContributions = salarySacrifice + personalDeductible;
   const totalConcessional = employerSG + userContributions;
   
-  // Adjusted taxable income (after salary sacrifice)
-  const taxableIncomeAfter = Math.max(0, taxableIncome - salarySacrifice);
+  // Adjusted taxable income (after salary sacrifice and personal deductible contributions)
+  // Personal deductible contributions should reduce taxable income the same way as salary sacrifice
+  const taxableIncomeAfter = Math.max(0, taxableIncome - salarySacrifice - personalDeductible);
   
   // Tax calculations before and after
   const taxBefore = calculateTotalTax(taxableIncome, includeMedicareLevy);
@@ -68,8 +69,10 @@ export function calculateSuperContribution(
   const taxSaving = Math.round((taxBefore.totalTax - taxAfter.totalTax - contributionsTax) * 100) / 100;
   
   // Take-home pay calculations
+  // Take-home pay: taxable income minus taxes. We do not subtract personalDeductible again here
+  // because it has already been applied to reduce taxable income above (treat like salary sacrifice).
   const takeHomePayBefore = Math.round((taxableIncome - taxBefore.totalTax) * 100) / 100;
-  const takeHomePayAfter = Math.round((taxableIncomeAfter - taxAfter.totalTax - personalDeductible) * 100) / 100;
+  const takeHomePayAfter = Math.round((taxableIncomeAfter - taxAfter.totalTax) * 100) / 100;
   const takeHomePayDelta = Math.round((takeHomePayAfter - takeHomePayBefore) * 100) / 100;
   
   // Warnings and checks

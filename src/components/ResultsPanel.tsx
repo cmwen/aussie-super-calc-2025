@@ -49,26 +49,26 @@ export function ResultsPanel() {
   return (
     <div className="flex-1 space-y-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <Card title="Super Contribution Summary">
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-600">Tax Saving:</span>
-              <span className="font-semibold text-green-600">{formatCurrency(superResult.taxSaving)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Tax Saving:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(superResult.taxSaving)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Net into Super:</span>
-              <span className="font-semibold">{formatCurrency(superResult.netIntoSuper)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Net into Super:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(superResult.netIntoSuper)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Take Home Change:</span>
-              <span className={`font-semibold ${superResult.takeHomePayDelta >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span className="text-gray-600 dark:text-gray-400">Take Home Change:</span>
+              <span className={`font-semibold ${superResult.takeHomePayDelta >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {formatCurrency(superResult.takeHomePayDelta)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Marginal Tax Rate:</span>
-              <span className="font-semibold">{formatPercentage(superResult.marginalTaxRate)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Marginal Tax Rate:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{formatPercentage(superResult.marginalTaxRate)}</span>
             </div>
           </div>
         </Card>
@@ -76,20 +76,46 @@ export function ResultsPanel() {
         <Card title="Mortgage Offset Summary">
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-600">Annual Interest Saved:</span>
-              <span className="font-semibold text-green-600">{formatCurrency(offsetResult.interestSavedYear1)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Annual Interest Saved:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(offsetResult.interestSavedYear1)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Monthly Saving:</span>
-              <span className="font-semibold">{formatCurrency(offsetResult.monthlyInterestSaving)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Monthly Saving:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(offsetResult.monthlyInterestSaving)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Total Lifetime Savings:</span>
-              <span className="font-semibold">{formatCurrency(offsetResult.totalInterestSavedOverLife)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Total Lifetime Savings:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(offsetResult.totalInterestSavedOverLife)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Years off Loan:</span>
-              <span className="font-semibold">{offsetResult.yearsOffLoan.toFixed(1)} years</span>
+              <span className="text-gray-600 dark:text-gray-400">Years off Loan:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{offsetResult.yearsOffLoan.toFixed(1)} years</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Total Combined Benefit">
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Annual Tax Saving:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(superResult.taxSaving)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Annual Interest Saving:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(offsetResult.interestSavedYear1)}</span>
+            </div>
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-2">
+              <div className="flex justify-between">
+                <span className="text-gray-700 dark:text-gray-300 font-medium">Total Annual Benefit:</span>
+                <span className="font-bold text-lg text-green-600 dark:text-green-400">
+                  {formatCurrency(superResult.taxSaving + offsetResult.interestSavedYear1)}
+                </span>
+              </div>
+            </div>
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-2">
+              <p className="text-xs text-green-800 dark:text-green-200">
+                This is your total annual benefit from the current allocation
+              </p>
             </div>
           </div>
         </Card>
@@ -97,16 +123,16 @@ export function ResultsPanel() {
         <Card title="Spouse Contribution Summary">
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-600">Tax Offset:</span>
-              <span className="font-semibold text-green-600">{formatCurrency(spouseResult.taxOffset)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Tax Offset:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(spouseResult.taxOffset)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Effective Rate:</span>
-              <span className="font-semibold">{spouseResult.effectiveTaxRate.toFixed(1)}%</span>
+              <span className="text-gray-600 dark:text-gray-400">Effective Rate:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{spouseResult.effectiveTaxRate.toFixed(1)}%</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Net Benefit:</span>
-              <span className="font-semibold text-green-600">{formatCurrency(spouseResult.netBenefit)}</span>
+              <span className="text-gray-600 dark:text-gray-400">Net Benefit:</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">{formatCurrency(spouseResult.netBenefit)}</span>
             </div>
           </div>
         </Card>
@@ -132,63 +158,63 @@ export function ResultsPanel() {
       {/* Detailed Breakdown Table */}
       <Card title="Detailed Scenario Comparison">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Scenario
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Annual Benefit
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Take Home Impact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Net Position
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                   Super Contribution
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-green-400">
                   {formatCurrency(superResult.taxSaving)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {formatCurrency(superResult.takeHomePayDelta)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {formatCurrency(superResult.netIntoSuper)}
                 </td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                   Mortgage Offset
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-green-400">
                   {formatCurrency(offsetResult.interestSavedYear1)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   -{formatCurrency(offsetContribution)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {formatCurrency(offsetContribution)}
                 </td>
               </tr>
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                   Spouse Contribution
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-green-400">
                   {formatCurrency(spouseResult.taxOffset)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   -{formatCurrency(spouseContribution)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                   {formatCurrency(spouseContribution)}
                 </td>
               </tr>
